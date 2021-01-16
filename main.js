@@ -106,7 +106,6 @@ function autoMove() {
 	
 	// Use appropriate algorithm for difficulty level
 	if (difficultyLevel === 'level-1') {
-		console.log(`Difficulty: ${difficultyLevel}, using level-1`);
 		// Select move based on whether it can win or if it can block user winning on this move
 		selectedMove = nextMoveEasy('x');
 		if (!selectedMove) {
@@ -123,7 +122,6 @@ function autoMove() {
 			}
 		}
 	} else {
-		console.log(`Difficulty: ${difficultyLevel}, using level-2`);
 		// Use minimax to predict best move
 		selectedMove = minimax([...squares], compPlayer, 0).index;
 	}
