@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Naughts & Crosses</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+	<h1 class="game-title">Naughts &amp; Crosses</h1>
+
+	<section class="game">
+		<div class="board"></div>	
+		<div class="players">
+			<div class="players-turn players-turn--naughts players-turn--active">
+				<div class="naught-icon">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+						<g id="layer_1">
+							<circle cx="15" cy="15" r="13" fill="none" stroke="#3b3b40" stroke-miterlimit="10" stroke-width="4" data-name="layer_1" />
+						</g>
+					</svg>
+				</div>
+				<span class="winsCounter winsCounter--naughts">-</span>
+			</div>
+			<div class="players-turn players-turn--crosses">
+				<div class="crosses-icon">
+					<span class="cross-line cross-line--one"></span>
+					<span class="cross-line cross-line--two"></span>
+				</div>
+				<span class="winsCounter winsCounter--crosses">-</span>
+			</div>
+		</div>
+		<div class="difficulty">			
+			<p class="difficulty__label">Difficulty:</p>
+			<button class="difficulty__btn" data-difficulty="level-1">Easy</button>
+			<button class="difficulty__btn difficulty__btn--active" data-difficulty="level-2" >Pretty tricky</button>
+		</div>
+	</section>
+
+	<script src="Game.js"></script>
+</body>
+</html>

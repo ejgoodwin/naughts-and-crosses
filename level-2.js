@@ -20,7 +20,6 @@ const winningCombos = [
 // For minimax
 const compPlayer = 'x';
 const userPlayer = 'o';
-let countFunc = 0;
 
 let player = true;  // true is 'o', false is 'x'
 let boardLocked = false;
