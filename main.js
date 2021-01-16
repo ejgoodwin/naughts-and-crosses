@@ -347,7 +347,7 @@ function resetGame() {
 	boardLocked = false;
 	// Switch to computer taking first go
 	if (!starterIsUser) {
-		setTimeout(() => autoMove(), 250);
+		autoMove()
 		toggleActiveState('crosses');
 	}
 }
