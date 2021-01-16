@@ -149,14 +149,13 @@ function minimax(testBoard, player, depth) {
 						then state of board with new move added.
 		player 		=> 	compPlayer || userPlayer.
 		depth 		=> 	the depth of that path on the search tree.
-		Recursive algorithm using depth first search to build a search tree
-		of possible outcomes for each potential move. A score is applied depending
-		on whether the leaf node shows a win for compPlayer, win for userPlayer, or draw.
+		Recursive algorithm that finds all possible outcomes for each potential move. 
+		A score is applied depending on whether the leaf node shows a win for compPlayer, 
+		win for userPlayer, or draw. Takes into account depth of tree.
 	*/
 	const moves = []; 
-	// Array to store frontier
 	let availableSquares = [];
-	// Find available squares to add to frontier
+	// Find available squares
 	for (let i = 0; i < testBoard.length; i++) {
 		if (testBoard[i] === null) {
 			// Add the index of that available square
@@ -173,8 +172,7 @@ function minimax(testBoard, player, depth) {
 		return {score:0};
 	} 
 
-
-	// Loop through frontier (available squares)
+	// Loop through available squares
 	for (let i = 0; i < availableSquares.length; i++) {
 		// Create object for each move and store the number of that square as the index
 		let move = {};
