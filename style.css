@@ -1,0 +1,413 @@
+* {
+	box-sizing: border-box;
+	font-family: sans-serif;
+}
+
+.game-title {
+	color: #3b3b40;
+	text-align: center;
+}
+
+.game {
+	text-align: center;
+}
+
+.board {
+	background: #ff9683;
+	border: 15px solid #ff8a75;
+	border-radius: .5rem;
+	display: flex;
+	flex-wrap: wrap;
+	height: 200px;
+	margin: auto;
+	width: 210px;
+}
+
+.board-square {
+	align-items: center;
+	background: #ff9683;
+	display: flex;
+	border: none;
+	border-radius: 0;
+	color: #92210c;
+	cursor: pointer;
+	flex-grow: 1;
+	font-size: 2rem;
+	height: 57px;
+    justify-content: center;
+	padding: 0;
+	position: relative;
+	transition: .1s;
+	width: 33.3333%;
+}
+
+.board-square:hover {
+	background: rgba(255,244,161,.2);
+}
+.board-square.animate:before,
+.board-square:after {
+	content: '';
+	bottom: 0;
+	left: 0;
+	right: 0;
+	top: 0;
+	position: absolute;
+	z-index: 1;
+}
+
+.board-square.animate:nth-of-type(1):before {
+	animation: squareAnimY .5s;
+	animation-fill-mode: forwards;
+	border-right: 1px solid #d65c46;
+	transform: scaleY(0);
+	transform-origin: bottom;
+}
+.board-square.animate:nth-of-type(1):after {
+	animation: squareAnimX .5s;
+	animation-fill-mode: forwards;
+	border-bottom: 1px solid #d65c46;
+	transform: scaleY(0);
+	transform-origin: right;
+}
+
+.board-square.animate:nth-of-type(2):before {
+	animation: squareAnimX .5s;
+	animation-fill-mode: forwards;
+	border-bottom: 1px solid #d65c46;
+	transform: scaleX(0);
+	transform-origin: left;
+}
+.board-square.animate:nth-of-type(2):after {
+	animation: squareAnimX .5s;
+	animation-fill-mode: forwards;
+	border-bottom: 1px solid #d65c46;
+	transform: scaleX(0);
+	transform-origin: right;
+}
+
+.board-square.animate:nth-of-type(3):before {
+	animation: squareAnimY .5s;
+	animation-fill-mode: forwards;
+	border-left: 1px solid #d65c46;
+	transform: scaleY(0);
+	transform-origin: bottom;
+}
+.board-square.animate:nth-of-type(3):after {
+	animation: squareAnimX .5s;
+	animation-fill-mode: forwards;
+	border-bottom: 1px solid #d65c46;
+	transform: scaleY(0);
+	transform-origin: left;
+}
+
+.board-square.animate:nth-of-type(4):before {
+	animation: squareAnimY .5s;
+	animation-fill-mode: forwards;
+	border-right: 1px solid #d65c46;
+	transform: scaleY(0);
+	transform-origin: top;
+}
+.board-square.animate:nth-of-type(4):after {
+	animation: squareAnimY .5s;
+	animation-fill-mode: forwards;
+	border-right: 1px solid #d65c46;
+	transform: scaleY(0);
+	transform-origin: bottom;
+}
+
+.board-square.animate:nth-of-type(6):before {
+	animation: squareAnimY .5s;
+	animation-fill-mode: forwards;
+	border-left: 1px solid #d65c46;
+	transform: scaleY(0);
+	transform-origin: top;
+}
+.board-square.animate:nth-of-type(6):after {
+	animation: squareAnimY .5s;
+	animation-fill-mode: forwards;
+	border-left: 1px solid #d65c46;
+	transform: scaleY(0);
+	transform-origin: bottom;
+}
+
+.board-square.animate:nth-of-type(7):before {
+	animation: squareAnimX .5s;
+	animation-fill-mode: forwards;
+	border-top: 1px solid #d65c46;
+	transform: scaleY(0);
+	transform-origin: right;
+}
+.board-square.animate:nth-of-type(7):after {
+	animation: squareAnimY .5s;
+	animation-fill-mode: forwards;
+	border-right: 1px solid #d65c46;
+	transform: scaleY(0);
+	transform-origin: top;
+}
+
+.board-square.animate:nth-of-type(8):before {
+	animation: squareAnimX .5s;
+	animation-fill-mode: forwards;
+	border-top: 1px solid #d65c46;
+	transform: scaleX(0);
+	transform-origin: left;
+}
+.board-square.animate:nth-of-type(8):after {
+	animation: squareAnimX .5s;
+	animation-fill-mode: forwards;
+	border-top: 1px solid #d65c46;
+	transform: scaleX(0);
+	transform-origin: right;
+}
+
+.board-square.animate:nth-of-type(9):before {
+	animation: squareAnimX .5s;
+	animation-fill-mode: forwards;
+	border-top: 1px solid #d65c46;
+	transform: scaleY(0);
+	transform-origin: left;
+}
+.board-square.animate:nth-of-type(9):after {
+	animation: squareAnimY .5s;
+	animation-fill-mode: forwards;
+	border-left: 1px solid #d65c46;
+	transform: scaleY(0);
+	transform-origin: top;
+}
+
+
+
+@keyframes squareAnimY {
+	0% {
+		transform: scaleY(0);
+	}
+	100% {
+		transform: scaleY(1);
+	}
+}
+@keyframes squareAnimX {
+	0% {
+		transform: scaleX(0);
+	}
+	100% {
+		transform: scaleX(1);
+	}
+}
+
+/* HIGHLIGHT WINNING COMBO*/
+.winning-combo {
+	background: rgba(253,242,152,.8);
+}
+.winning-combo:hover {
+	background: rgba(253,242,152,.8);
+}
+
+.reset-button {
+	background: #699CFF;
+	border: none;
+	border-radius: 3rem;
+	color: white;
+	cursor: pointer;
+	font-size: 1rem;
+	margin-top: 3rem;
+	padding: .75rem 1.25rem;
+	transition: .1s;
+}
+.reset-button:hover {
+	background-color: #5d8deb;
+}
+
+/* PLAYERS TURNS */
+.players {
+	display: flex;
+	flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1rem;
+    width: 200px;
+    margin: auto;
+}
+.players--hide {
+	display: none;
+}
+.players-label {
+	width: 100%;
+}
+.players-turn {
+	display: flex;
+    align-items: center;
+    justify-content: center;
+	padding: .5rem;
+	height: 50px;
+	width: 49%;
+	overflow: hidden;
+}
+.players-turn--active .naught-icon,
+.players-turn--active .crosses-icon {
+	position: relative;
+}
+
+.players-turn--active .naught-icon:before,
+.players-turn--active .naught-icon:after,
+.players-turn--active .crosses-icon:before,
+.players-turn--active .crosses-icon:after {
+	position: absolute;
+	left: 10px;
+	border-radius: 2px;
+	content: '';
+	height: 30px;
+	width: 30px;
+	background-color: #45caa6;
+	transform-origin: left;
+}
+.players-turn--active .naught-icon:before {
+	top: -42px;
+	transform: rotate(45deg) translateX(-50%);
+}
+.players-turn--active .naught-icon:after {
+	bottom: -42px;
+	transform: rotate(-45deg) translateX(-50%);
+}
+
+.players-turn--active .crosses-icon:before {
+	top: -49px;
+	transform: rotate(45deg) translateX(-50%);
+}
+.players-turn--active .crosses-icon:after {
+	bottom: -49px;
+	transform: rotate(-45deg) translateX(-50%);
+}
+.players-turn .naught-icon {
+	height: 20px;
+	width: 20px;
+}
+.winsCounter {
+	color: rgba(59,59,64,.5);
+	margin-left: 1rem;
+}
+
+
+
+/* RESULTS */
+.results-container {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	margin: auto;
+	padding-top: 1rem;
+	height: 100px;
+	width: 300px;
+	transform: scale(1.5);
+	transform-origin: top;
+}
+.results-container p {
+	color: #3b3b40;
+	margin-top: 0;
+	width: 100%;
+}
+
+/* ICONS */
+.naught-icon {
+    height: 30px;
+    width: 30px;
+}
+.naught-icon--animated circle {
+	animation: crossAnimation .2s;
+	animation-fill-mode: forwards;
+	stroke-dashoffset: 90;
+	stroke-dasharray: 90;
+}
+.cross-line {
+	border-radius: 5px;
+	display: block;
+	height: 3px;
+    width: 22px;
+    background: #92210c;
+}
+.cross-line--one {
+    transform: rotate(45deg) translate(0, 2px);
+}
+.cross-line--two {
+	transform: rotate(-45deg) translate(0, -2px);
+}
+
+.cross-icon--animated .cross-line--one {
+	animation: crossOne .1s;
+    animation-fill-mode: forwards;
+    width: 35px;
+    transform: rotate(45deg) translate(-4px, -11px) scaleX(0);
+    transform-origin: left;
+}
+
+.cross-icon--animated .cross-line--two {
+	animation: crossTwo .1s .1s;
+	animation-fill-mode: forwards;
+    width: 35px;
+	transform: rotate(-45deg) translate(6px, -13px) scaleX(0);
+	transform-origin: right;
+}
+@keyframes crossOne {
+	0% {
+		transform: rotate(45deg) translate(-4px, -11px) scaleX(0);
+	}
+	100% {
+		transform: rotate(45deg) translate(-4px, -11px) scaleX(1);
+	}
+}
+@keyframes crossTwo {
+	0% {
+		transform: rotate(-45deg) translate(6px, -13px) scaleX(0);
+	}
+	100% {
+		transform: rotate(-45deg) translate(6px, -13px) scaleX(1);
+	}
+}
+@keyframes crossAnimation {
+	0% {
+		stroke-dashoffset: 90;
+	}
+	100% {
+		stroke-dashoffset: 0;
+	}
+}
+
+/* DIFFICULTY */
+.difficulty {
+	align-items: center;
+	bottom: 1rem;
+	display: flex;
+	position: fixed;
+	right: 1rem;
+}
+.difficulty__label {
+	color: #3b3b40;
+	padding-right: .5rem;
+}
+.difficulty__btn {
+	background: #c6ece2;
+	color: #3b3b40;
+	padding: .5rem 1rem;
+	text-decoration: none;
+	transition: .1s;
+}
+.difficulty__btn--active {
+	background: #45caa6;
+	color: white;
+}
+.difficulty__btn:hover {
+	background: #3db796;
+	color: white;
+}
+.difficulty__btn--active:hover {
+	background: #45caa6;
+}
+.difficulty__btn:first-of-type {
+	border-top-left-radius: 1rem;
+	border-bottom-left-radius: 1rem;
+}
+.difficulty__btn:last-of-type {
+	border-top-right-radius: 1rem;
+	border-bottom-right-radius: 1rem;
+}
+
