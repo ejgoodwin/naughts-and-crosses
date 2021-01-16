@@ -22,6 +22,7 @@ const compPlayer = 'x';
 const userPlayer = 'o';
 
 let player = true;  // true is 'o', false is 'x'
+let starterIsUser = true; // Track who starts game (true is 'o', false is 'x')
 let boardLocked = false;
 let computerTurn = false;
 let turnCounter = 0;
@@ -315,6 +316,8 @@ function showResults(winningCombo, playersDraw) {
 	resultsContainer.appendChild(resultsLabel);
 	setTimeout(() => game.appendChild(resultsContainer), 500);
 	setTimeout(() => game.appendChild(resetBtn), 1000);
+	// Flip to say computer is the starter
+	starterIsUser = !starterIsUser;
 }
 
 function resetGame() {
@@ -342,6 +345,11 @@ function resetGame() {
 	toggleActiveState('naughts');
 	// unlock board for next game
 	boardLocked = false;
+	// Switch to computer taking first go
+	if (!starterIsUser) {
+		setTimeout(() => autoMove(), 250);
+		toggleActiveState('crosses');
+	}
 }
 
 function toggleActiveState(nextPlayer) {
