@@ -19,7 +19,7 @@
 	display: flex;
 	flex-wrap: wrap;
 	height: 200px;
-	margin: auto;
+	margin: 0 auto .5rem auto;
 	width: 210px;
 }
 
@@ -300,6 +300,7 @@
 }
 .results-container p {
 	color: #3b3b40;
+	font-size: 1.5rem;
 	margin-top: 0;
 	width: 100%;
 }
@@ -383,7 +384,10 @@
 }
 .difficulty__btn {
 	background: #c6ece2;
+	border: none;
 	color: #3b3b40;
+	cursor: pointer;
+	font-size: 1rem;
 	padding: .5rem 1rem;
 	text-decoration: none;
 	transition: .1s;

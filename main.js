@@ -20,7 +20,6 @@ const winningCombos = [
 // For minimax
 const compPlayer = 'x';
 const userPlayer = 'o';
-let countFunc = 0;
 
 let player = true;  // true is 'o', false is 'x'
 let boardLocked = false;
@@ -28,11 +27,13 @@ let computerTurn = false;
 let turnCounter = 0;
 let naughtWins = 0;
 let crossesWins = 0;
+let difficultyLevel = 'level-2';
 const board = document.querySelector('.board');
 const playersContainer = document.querySelector('.players');
 const game = document.querySelector('.game');
 const playersTurnNaughts = document.querySelector('.players-turn--naughts');
 const playersTurnCrosses = document.querySelector('.players-turn--crosses');
+const difficultyBtns = document.querySelectorAll('.difficulty__btn');
 const crossIcon = '<div class="cross-icon cross-icon--animated"><span class="cross-line cross-line--one"></span><span class="cross-line cross-line--two"></span></div>';
 const naughtIcon = 
 `<div class="naught-icon naught-icon--animated">
@@ -43,17 +44,36 @@ const naughtIcon =
 </svg>
 </div>`;
 
+function initDifficultyBtns() {
+	// Event listeners for difficulty buttons
+	difficultyBtns.forEach((button) => {
+		button.addEventListener('click', () => handleDifficultyClick(button))
+	});
+}
+
+function handleDifficultyClick(button) {
+	// Set new difficulty level
+	difficultyLevel = button.dataset.difficulty;
+	// Remove active class from buttons
+	difficultyBtns.forEach((button) => {
+		button.classList.remove('difficulty__btn--active');
+	})
+	// Add active class to clicked button
+	button.classList.add('difficulty__btn--active');
+	resetGame();
+}
+
 function createBoard() {
 	squares = [...reset];
 	for (let i = 0; i < squares.length; i++) {
 		const square = document.createElement('button');
 		square.classList.add('board-square', 'animate');
-		square.addEventListener('click', () => handleClick(i, square))
+		square.addEventListener('click', () => handleSquareClick(i, square))
 		board.appendChild(square);
 	}
 }
 
-function handleClick(counter, squareEl) {
+function handleSquareClick(counter, squareEl) {
 	// Board locks after draw/winner || computer's turn - not clickable
 	if (boardLocked || computerTurn) return;
 	// If square is already taken, return and do not change
@@ -65,7 +85,7 @@ function handleClick(counter, squareEl) {
 	// Assign playerIcon to array
 	squares[counter] = 'o';
 	//Check for winner
-	gameLogic();
+	checkWinDraw();
 	// Change active state showing who's turn it is
 	setTimeout(() => toggleActiveState('crosses'), 300);
 
@@ -82,17 +102,38 @@ function autoMove() {
 	// Flip player
 	player = !player;
 	turnCounter += 1;
+	
+	// Use appropriate algorithm for difficulty level
+	if (difficultyLevel === 'level-1') {
+		console.log(`Difficulty: ${difficultyLevel}, using level-1`);
+		// Select move based on whether it can win or if it can block user winning on this move
+		selectedMove = nextMoveEasy('x');
+		if (!selectedMove) {
+			selectedMove = nextMoveEasy('o');
+		}
+		// If it cannot win or block, select random move
+		if (!selectedMove) {
+			while (true) {
+				let randomNumber = Math.floor(Math.random() * 9);
+				if (squares[randomNumber] === null) {
+					selectedMove = randomNumber;
+					break;
+				}
+			}
+		}
+	} else {
+		console.log(`Difficulty: ${difficultyLevel}, using level-2`);
+		// Use minimax to predict best move
+		selectedMove = minimax([...squares], compPlayer, 0).index;
+	}
+	console.log(`selectedMove: ${selectedMove}`);
 	// Get squares
 	const squaresElArr = document.querySelectorAll('.board-square');
-	// Use minimax to predict best move
-	selectedMove = minimax([...squares], compPlayer, 0).index;
-	console.log(`selectedMove: ${selectedMove}`);
-	// console.log(moves)
 	// Find correct square
 	squaresElArr[selectedMove].innerHTML = crossIcon;
 	// Assign playerIcon to array
 	squares[selectedMove] = 'x';
-	gameLogic();
+	checkWinDraw();
 	// change active state showing who's turn it is
 	setTimeout(() => toggleActiveState('naughts'), 300);
 	// Flip player back
@@ -193,7 +234,7 @@ function testWin(testBoard, player) {
 	}
 }
 
-function calculateNextMove(playerIcon) {
+function nextMoveEasy(playerIcon) {
 	/* 
 		playerIcon is either 'x' or 'o'
 		Use 'x' first to see if comp can win on this turn
@@ -211,11 +252,11 @@ function calculateNextMove(playerIcon) {
 	}
 }
 
-function gameLogic() {
+function checkWinDraw() {
 	for (let i = 0; i < winningCombos.length; i++) {
 		const [a,b,c] = winningCombos[i];
 		if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-			winner(winningCombos[i], false);
+			showResults(winningCombos[i], false);
 			// Lock board so it is not clickable
 			boardLocked = true;
 			break;
@@ -223,13 +264,13 @@ function gameLogic() {
 	}
 	// Call a draw if no winner and all squares taken
 	if (!boardLocked && turnCounter >= 9) {
-		winner(null, true);
+		showResults(null, true);
 		// Lock board so it is not clickable
 		boardLocked = true;
 	}
 }
 
-function winner(winningCombo, playersDraw) {
+function showResults(winningCombo, playersDraw) {
 	// Create container for results
 	const resultsContainer = document.createElement('div');
 	resultsContainer.classList.add('results-container');
@@ -284,8 +325,10 @@ function resetGame() {
 	// Reset turnCounter for next game
 	turnCounter = 0;
 	// Remove results and button
-	document.querySelector('.results-container').remove();
-	document.querySelector('.reset-button').remove();
+	const resultsContainer = document.querySelector('.results-container');
+	const resetBtn = document.querySelector('.reset-button');
+	if (resultsContainer) resultsContainer.remove();
+	if (resetBtn) resetBtn.remove();
 	// Remove highlight from winning squares
 	const boardSquares = document.querySelectorAll('.board-square');
 	boardSquares.forEach((item) => {
@@ -311,5 +354,6 @@ function toggleActiveState(nextPlayer) {
 		playersTurnCrosses.classList.add('players-turn--active');
 	}
 }
-	
+
+initDifficultyBtns();	
 createBoard();
