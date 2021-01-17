@@ -86,7 +86,16 @@ function handleSquareClick(counter, squareEl) {
 	// Assign playerIcon to array
 	squares[counter] = 'o';
 	//Check for winner
-	checkWinDraw();
+	const isWin = checkWinDraw(squares, 'o');
+	if (isWin) {
+		showResults(isWin, false);
+		// Lock board so it is not clickable
+		boardLocked = true;
+	} else if (!isWin && !boardLocked && turnCounter >= 9) {
+		// Call a draw if no winner and all squares taken
+		showResults(null, true);
+		boardLocked = true;
+	}
 	// Change active state showing who's turn it is
 	setTimeout(() => toggleActiveState('crosses'), 300);
 
@@ -126,13 +135,23 @@ function autoMove() {
 		selectedMove = minimax([...squares], compPlayer, 0).index;
 	}
 	console.log(`selectedMove: ${selectedMove}`);
-	// Get squares
-	const squaresElArr = document.querySelectorAll('.board-square');
 	// Find correct square
+	const squaresElArr = document.querySelectorAll('.board-square');
 	squaresElArr[selectedMove].innerHTML = crossIcon;
 	// Assign playerIcon to array
 	squares[selectedMove] = 'x';
-	checkWinDraw();
+	// Check for winner
+	const isWin = checkWinDraw(squares, 'x');
+	if (isWin) {
+		showResults(isWin, false);
+		// Lock board so it is not clickable
+		boardLocked = true;
+	// Call a draw if no winner and all squares taken
+	} else if (!isWin && !boardLocked && turnCounter >= 9) {
+		showResults(null, true);
+		boardLocked = true;
+	}
+
 	// change active state showing who's turn it is
 	setTimeout(() => toggleActiveState('naughts'), 300);
 	// Flip player back
@@ -162,9 +181,9 @@ function minimax(testBoard, player, depth) {
 	}
 
 	// Check if current board state holds a win/draw
-	if (testWin(testBoard, userPlayer)) {
+	if (checkWinDraw(testBoard, userPlayer)) {
 		return {score:-100};
-	} else if (testWin(testBoard, compPlayer)) {
+	} else if (checkWinDraw(testBoard, compPlayer)) {
 		return {score:100};
 	} else if (availableSquares.length === 0) {
 		return {score:0};
@@ -214,23 +233,6 @@ function minimax(testBoard, player, depth) {
 	return moves[bestMove];
 }
 
-function testWin(testBoard, player) {
-	if (
-		(testBoard[0] === player && testBoard[1] === player && testBoard[2] === player) ||
-		(testBoard[3] === player && testBoard[4] === player && testBoard[5] === player) ||
-		(testBoard[6] === player && testBoard[7] === player && testBoard[8] === player) ||
-		(testBoard[0] === player && testBoard[3] === player && testBoard[6] === player) ||
-		(testBoard[1] === player && testBoard[4] === player && testBoard[7] === player) ||
-		(testBoard[2] === player && testBoard[5] === player && testBoard[8] === player) ||
-		(testBoard[0] === player && testBoard[4] === player && testBoard[8] === player) ||
-		(testBoard[2] === player && testBoard[4] === player && testBoard[6] === player)	
-	) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
 function nextMoveEasy(playerIcon) {
 	/* 
 		playerIcon is either 'x' or 'o'
@@ -249,30 +251,28 @@ function nextMoveEasy(playerIcon) {
 	}
 }
 
-function checkWinDraw() {
+function checkWinDraw(board, playerIcon) {
+	/*
+		board 		=> uses the 'testBoard' for minimax, and 'squares' (normal board) for other
+		playerIcon 	=> 'o' or 'x'
+		Returns the winning combo to be used in results to highlight squares
+	*/
 	for (let i = 0; i < winningCombos.length; i++) {
 		const [a,b,c] = winningCombos[i];
-		if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-			showResults(winningCombos[i], false);
-			// Lock board so it is not clickable
-			boardLocked = true;
-			break;
+		if (board[a] === playerIcon &&
+			board[b] === playerIcon &&
+			board[c] === playerIcon) {
+			return winningCombos[i];
 		}
 	}
-	// Call a draw if no winner and all squares taken
-	if (!boardLocked && turnCounter >= 9) {
-		showResults(null, true);
-		// Lock board so it is not clickable
-		boardLocked = true;
-	}
+	return false;
 }
 
 function showResults(winningCombo, playersDraw) {
-	// Create container for results
+	// Create containers for results and icons
 	const resultsContainer = document.createElement('div');
 	resultsContainer.classList.add('results-container');
 	const resultsLabel = document.createElement('p');
-	// Create containers for icons
 	const crossIconDiv = document.createElement('div');
 	const naughtIconDiv = document.createElement('div');
 	crossIconDiv.innerHTML = crossIcon;
