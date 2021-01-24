@@ -202,7 +202,7 @@ function minimax(testBoard, player, depth) {
 				bestScore.score = result.score - depth;
 				bestScore.index = availableSquares[i];
 			}
-			// Reset current score to null 
+			// Reset current square to null 
 			// -> next iteration needs to see state of board prior to that potential move
 			testBoard[availableSquares[i]] = null;
 		}
