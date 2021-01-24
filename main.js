@@ -170,7 +170,6 @@ function minimax(testBoard, player, depth) {
 		A score is applied depending on whether the leaf node shows a win for compPlayer, 
 		win for userPlayer, or draw. Takes into account depth of tree.
 	*/
-	const moves = []; 
 	let availableSquares = [];
 	// Find available squares
 	for (let i = 0; i < testBoard.length; i++) {
@@ -189,48 +188,40 @@ function minimax(testBoard, player, depth) {
 		return {score:0};
 	} 
 
-	// Loop through available squares
-	for (let i = 0; i < availableSquares.length; i++) {
-		// Create object for each move and store the number of that square as the index
-		let move = {};
-		move.index = availableSquares[i];
-		// Set empty square to current player 
-		testBoard[availableSquares[i]] = player;
-
-		// Collect score from calling func for opponent
-		if (player === compPlayer) {
+ 	if (player === compPlayer) {
+ 		let bestScore = {};
+		bestScore.score = -1000;
+		// loop through available squares 
+		for (let i = 0; i < availableSquares.length; i++) {
+			// assign player to the current square
+			testBoard[availableSquares[i]] = player;
+			// store result of minimax -> returns 'bestScore', i.e. {score, index}
 			let result = minimax(testBoard, userPlayer, depth+1);
-			// Apply returned score to move, taking into account the depth of the leaf node
-			move.score = result.score - depth;
-		} else {
-			let result = minimax(testBoard, compPlayer, depth+1);
-			move.score = result.score - depth;
-		}
-		// Reset square to empty
-		testBoard[availableSquares[i]] = null;
-		// Push object to array
-		moves.push(move);
-	}
-
-	let bestMove = null;
-	if (player === compPlayer) {
-		let bestScore = -1000;
-		for (let i = 0; i < moves.length; i++) {
-			if (moves[i].score > bestScore) {
-				bestScore = moves[i].score;
-				bestMove = i;
+			// Find the MAXIMUM score
+			if (result.score > bestScore.score) {
+				bestScore.score = result.score - depth;
+				bestScore.index = availableSquares[i];
 			}
+			// Reset current score to null 
+			// -> next iteration needs to see state of board prior to that potential move
+			testBoard[availableSquares[i]] = null;
 		}
-	} else {
-		let bestScore = 1000; 
-		for (let i = 0; i < moves.length; i++) {
-			if (moves[i].score < bestScore) {
-				bestScore = moves[i].score;
-				bestMove = i;
-			}
-		} 
-	}
-	return moves[bestMove];
+		return bestScore;
+ 	} else {
+ 		let bestScore = {};
+ 		bestScore.score = 1000;
+ 		for (let i = 0; i < availableSquares.length; i++) {
+ 			testBoard[availableSquares[i]] = player;
+ 			let result = minimax(testBoard, compPlayer, depth+1);
+ 			// Find the MINIMUM score
+ 			if (result.score < bestScore.score) {
+ 				bestScore.score = result.score - depth;
+ 				bestScore.index = availableSquares[i];
+ 			}
+ 			testBoard[availableSquares[i]] = null;
+ 		}
+ 		return bestScore;
+ 	}
 }
 
 function nextMoveEasy(playerIcon) {
