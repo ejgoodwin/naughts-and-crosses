@@ -117,11 +117,11 @@ function autoMove() {
 	if (difficultyLevel === 'level-1') {
 		// Select move based on whether it can win or if it can block user winning on this move
 		selectedMove = nextMoveEasy('x');
-		if (!selectedMove) {
+		if (selectedMove === false) {
 			selectedMove = nextMoveEasy('o');
 		}
 		// If it cannot win or block, select random move
-		if (!selectedMove) {
+		if (selectedMove === false) {
 			while (true) {
 				let randomNumber = Math.floor(Math.random() * 9);
 				if (squares[randomNumber] === null) {
@@ -240,6 +240,7 @@ function nextMoveEasy(playerIcon) {
 			return a;
 		}
 	}
+	return false;
 }
 
 function checkWinDraw(board, playerIcon) {
