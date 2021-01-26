@@ -118,12 +118,10 @@ function autoMove() {
 		// Select move based on whether it can win or if it can block user winning on this move
 		selectedMove = nextMoveEasy('x');
 		if (selectedMove === false) {
-			console.log('seclected 1' + selectedMove)
 			selectedMove = nextMoveEasy('o');
 		}
 		// If it cannot win or block, select random move
 		if (selectedMove === false) {
-			console.log('seclected 2' + selectedMove)
 			while (true) {
 				let randomNumber = Math.floor(Math.random() * 9);
 				if (squares[randomNumber] === null) {
@@ -235,13 +233,10 @@ function nextMoveEasy(playerIcon) {
 	for (let i = 0; i < winningCombos.length; i++) {
 		const [a,b,c] = winningCombos[i];
 		if (squares[a] === playerIcon && squares[b] === playerIcon && squares[c] === null) {
-			console.log({c, playerIcon});
 			return c;
 		} else if (squares[a] === playerIcon && squares[c] === playerIcon && squares[b] === null) {
-			console.log({b, playerIcon});
 			return b;
 		} else if (squares[b] === playerIcon && squares[c] === playerIcon && squares[a] === null) {
-			console.log({a, playerIcon});
 			return a;
 		}
 	}
