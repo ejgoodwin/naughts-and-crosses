@@ -132,7 +132,10 @@ function autoMove() {
 		}
 	} else {
 		// Use minimax to predict best move
-		selectedMove = minimax([...squares], compPlayer, 0).index;
+		let minmaxResult;
+		minmaxResult = minimax([...squares], compPlayer, 0);
+		console.log(minmaxResult.score)
+		selectedMove = minmaxResult.index;
 	}
 	console.log(`selectedMove: ${selectedMove}`);
 	// Find correct square
@@ -168,7 +171,7 @@ function minimax(testBoard, player, depth) {
 		depth 		=> 	the depth of that path on the search tree.
 		Recursive algorithm that finds all possible outcomes for each potential move. 
 		A score is applied depending on whether the leaf node shows a win for compPlayer, 
-		win for userPlayer, or draw. Takes into account depth of tree.
+		win for userPlayer, or draw.
 	*/
 	let availableSquares = [];
 	// Find available squares
@@ -199,7 +202,7 @@ function minimax(testBoard, player, depth) {
 			let result = minimax(testBoard, userPlayer, depth+1);
 			// Find the MAXIMUM score
 			if (result.score > bestScore.score) {
-				bestScore.score = result.score - depth;
+				bestScore.score = result.score;
 				bestScore.index = availableSquares[i];
 			}
 			// Reset current square to null 
@@ -215,7 +218,7 @@ function minimax(testBoard, player, depth) {
  			let result = minimax(testBoard, compPlayer, depth+1);
  			// Find the MINIMUM score
  			if (result.score < bestScore.score) {
- 				bestScore.score = result.score - depth;
+ 				bestScore.score = result.score;
  				bestScore.index = availableSquares[i];
  			}
  			testBoard[availableSquares[i]] = null;
