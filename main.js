@@ -111,8 +111,6 @@ function autoMove() {
 	let selectedMove = null;
 	// Flip player
 	player = !player;
-	turnCounter += 1;
-	
 	// Use appropriate algorithm for difficulty level
 	if (difficultyLevel === 'level-1') {
 		// Select move based on whether it can win or if it can block user winning on this move
@@ -132,8 +130,9 @@ function autoMove() {
 		}
 	} else {
 		// Use minimax to predict best move
-		selectedMove = minimax([...squares], compPlayer, 0).index;
+		selectedMove = minimax([...squares], compPlayer, 9-turnCounter).index;
 	}
+	turnCounter += 1;
 	console.log(`selectedMove: ${selectedMove}`);
 	// Find correct square
 	const squaresElArr = document.querySelectorAll('.board-square');
@@ -168,7 +167,7 @@ function minimax(testBoard, player, depth) {
 		depth 		=> 	the depth of that path on the search tree.
 		Recursive algorithm that finds all possible outcomes for each potential move. 
 		A score is applied depending on whether the leaf node shows a win for compPlayer, 
-		win for userPlayer, or draw. Takes into account depth of tree.
+		win for userPlayer, or draw.
 	*/
 	let availableSquares = [];
 	// Find available squares
@@ -186,7 +185,9 @@ function minimax(testBoard, player, depth) {
 		return {score:100};
 	} else if (availableSquares.length === 0) {
 		return {score:0};
-	} 
+	} else if (depth === 0) {
+		return {score:0};
+	}
 
  	if (player === compPlayer) {
  		let bestScore = {};
@@ -196,10 +197,10 @@ function minimax(testBoard, player, depth) {
 			// assign player to the current square
 			testBoard[availableSquares[i]] = player;
 			// store result of minimax -> returns 'bestScore', i.e. {score, index}
-			let result = minimax(testBoard, userPlayer, depth+1);
+			let result = minimax(testBoard, userPlayer, depth-1);
 			// Find the MAXIMUM score
 			if (result.score > bestScore.score) {
-				bestScore.score = result.score - depth;
+				bestScore.score = result.score;
 				bestScore.index = availableSquares[i];
 			}
 			// Reset current square to null 
@@ -212,10 +213,10 @@ function minimax(testBoard, player, depth) {
  		bestScore.score = 1000;
  		for (let i = 0; i < availableSquares.length; i++) {
  			testBoard[availableSquares[i]] = player;
- 			let result = minimax(testBoard, compPlayer, depth+1);
+ 			let result = minimax(testBoard, compPlayer, depth-1);
  			// Find the MINIMUM score
  			if (result.score < bestScore.score) {
- 				bestScore.score = result.score - depth;
+ 				bestScore.score = result.score;
  				bestScore.index = availableSquares[i];
  			}
  			testBoard[availableSquares[i]] = null;
