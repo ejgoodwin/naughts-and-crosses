@@ -130,9 +130,7 @@ function autoMove() {
 		}
 	} else {
 		// Use minimax to predict best move
-		let minmaxResult;
-		minmaxResult = minimax([...squares], compPlayer, 9-turnCounter);
-		selectedMove = minmaxResult.index;
+		selectedMove = minimax([...squares], compPlayer, 9-turnCounter).index;
 	}
 	turnCounter += 1;
 	console.log(`selectedMove: ${selectedMove}`);
