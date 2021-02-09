@@ -111,8 +111,6 @@ function autoMove() {
 	let selectedMove = null;
 	// Flip player
 	player = !player;
-	turnCounter += 1;
-	
 	// Use appropriate algorithm for difficulty level
 	if (difficultyLevel === 'level-1') {
 		// Select move based on whether it can win or if it can block user winning on this move
@@ -133,10 +131,10 @@ function autoMove() {
 	} else {
 		// Use minimax to predict best move
 		let minmaxResult;
-		minmaxResult = minimax([...squares], compPlayer, 0);
-		console.log(minmaxResult.score)
+		minmaxResult = minimax([...squares], compPlayer, 9-turnCounter);
 		selectedMove = minmaxResult.index;
 	}
+	turnCounter += 1;
 	console.log(`selectedMove: ${selectedMove}`);
 	// Find correct square
 	const squaresElArr = document.querySelectorAll('.board-square');
@@ -189,7 +187,9 @@ function minimax(testBoard, player, depth) {
 		return {score:100};
 	} else if (availableSquares.length === 0) {
 		return {score:0};
-	} 
+	} else if (depth === 0) {
+		return {score:0};
+	}
 
  	if (player === compPlayer) {
  		let bestScore = {};
@@ -199,7 +199,7 @@ function minimax(testBoard, player, depth) {
 			// assign player to the current square
 			testBoard[availableSquares[i]] = player;
 			// store result of minimax -> returns 'bestScore', i.e. {score, index}
-			let result = minimax(testBoard, userPlayer, depth+1);
+			let result = minimax(testBoard, userPlayer, depth-1);
 			// Find the MAXIMUM score
 			if (result.score > bestScore.score) {
 				bestScore.score = result.score;
@@ -215,7 +215,7 @@ function minimax(testBoard, player, depth) {
  		bestScore.score = 1000;
  		for (let i = 0; i < availableSquares.length; i++) {
  			testBoard[availableSquares[i]] = player;
- 			let result = minimax(testBoard, compPlayer, depth+1);
+ 			let result = minimax(testBoard, compPlayer, depth-1);
  			// Find the MINIMUM score
  			if (result.score < bestScore.score) {
  				bestScore.score = result.score;
